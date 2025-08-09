@@ -1,9 +1,11 @@
+from unittest.mock import AsyncMock, patch
+
+import httpx
 import pytest
 from fastapi import status
 from fastapi.testclient import TestClient
+
 from app.main import app
-from unittest.mock import patch, AsyncMock
-import httpx
 
 client = TestClient(app)
 

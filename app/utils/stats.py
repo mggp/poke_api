@@ -1,6 +1,7 @@
-from typing import List
-import numpy as np
 from collections import Counter
+from typing import List
+
+import numpy as np
 
 
 def calculate_stats(data_list: List[int]):

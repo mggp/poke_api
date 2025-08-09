@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from httpx import HTTPError
+
 from app.models import BerryStatsResponse
 from app.services.pokebase_client import BerryClient
 from app.utils.stats import calculate_stats
@@ -17,9 +18,10 @@ async def all_berry_stats() -> BerryStatsResponse:
         # TODO: cache this data
         berries = await client.get_all_details()
     except HTTPError as e:
+        # Log the error here if needed
         raise HTTPException(
             status_code=500, detail="Failed to fetch berry details from the PokéAPI"
-        )
+        ) from e
 
     if not berries:
         return BerryStatsResponse()
