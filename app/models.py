@@ -11,4 +11,4 @@ class BerryStatsResponse(BaseModel):
     max_growth_time: int
     variance_growth_time: float
     mean_growth_time: float
-    frequency_growth_time: Dict[str, int]
+    frequency_growth_time: Dict[int, int]
