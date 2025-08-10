@@ -1,6 +1,7 @@
+import uvicorn
 from fastapi import FastAPI
 
-from .routers import berries
+from app.routers import berries
 
 app = FastAPI(
     title="Poké API",
@@ -8,3 +9,6 @@ app = FastAPI(
 )
 
 app.include_router(berries.router)
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

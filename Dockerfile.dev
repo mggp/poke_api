@@ -7,8 +7,6 @@ COPY requirements-dev.txt .
 RUN pip install --no-cache-dir -r requirements.txt -r requirements-dev.txt
 
 COPY app ./app
-
-# Install any dev tools you want (e.g., vim, curl)
-RUN apt-get update && apt-get install -y vim curl && rm -rf /var/lib/apt/lists/*
+COPY .env .
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
