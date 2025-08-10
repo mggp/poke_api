@@ -31,6 +31,7 @@ services:
     volumes:
       - ./app:/app/app
       - ./tests:/app/tests
-    command: ["pytest", "tests"]
+    working_dir: /app
+    command: ["python", "-m", "pytest", "tests"]
     environment:
       - ENV=test
