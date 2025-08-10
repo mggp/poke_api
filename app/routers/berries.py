@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from httpx import HTTPError
 
+from app.config import settings
 from app.models import BerryStatsResponse
 from app.services.pokebase_client import BerryClient
 from app.utils.stats import calculate_stats
@@ -10,9 +11,7 @@ router = APIRouter()
 
 @router.get("/allBerryStats")
 async def all_berry_stats() -> BerryStatsResponse:
-    client = BerryClient(
-        base_url="https://pokeasd"
-    )  # TODO: Use environment variable for base_url
+    client = BerryClient(base_url=settings.poke_api_path)
 
     try:
         # TODO: cache this data

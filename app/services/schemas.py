@@ -10,8 +10,8 @@ class NamedAPIResource(BaseModel):
 
 class NamedAPIResourceList(BaseModel):
     count: int
-    next: str = None
-    previous: str = None
+    next: str | None = None
+    previous: str | None = None
     results: List[NamedAPIResource]
 
 

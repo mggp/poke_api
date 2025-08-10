@@ -31,12 +31,12 @@ class NamedAssetAPIResource[AssetDetailT](PokebaseClient):
             all_resources.extend(resource_list.results)
             next_url = resource_list.next
 
-        return [NamedAPIResource(**item) for item in all_resources]
+        return all_resources
 
     async def get_page(self, url: str) -> NamedAPIResourceList:
         response = await self.client.get(url)
         response.raise_for_status()
-        return response.json()
+        return NamedAPIResourceList(**response.json())
 
     async def get_all_details(self) -> List[AssetDetailT]:
         all_resources = await self.get_list()
