@@ -11,6 +11,8 @@ router = APIRouter()
 
 @router.get("/allBerryStats")
 async def all_berry_stats() -> BerryStatsResponse:
+    """Retrieve berry info and compute statistics on their growth times."""
+
     client = BerryClient(base_url=settings.poke_api_path)
 
     try:
@@ -25,16 +27,16 @@ async def all_berry_stats() -> BerryStatsResponse:
     if not berries:
         return BerryStatsResponse()
 
-    names = (berry.name for berry in berries)
+    names = [berry.name for berry in berries]
     growth_times = [berry.growth_time for berry in berries]
     growth_time_stats = calculate_stats(growth_times)
 
     return BerryStatsResponse(
         berries_names=names,
-        min_growth_time=growth_time_stats["min"],
-        median_growth_time=growth_time_stats["median"],
-        max_growth_time=growth_time_stats["max"],
-        variance_growth_time=growth_time_stats["variance"],
-        mean_growth_time=growth_time_stats["mean"],
-        frequency_growth_time=growth_time_stats["frequency"],
+        min_growth_time=growth_time_stats.min,
+        median_growth_time=growth_time_stats.median,
+        max_growth_time=growth_time_stats.max,
+        variance_growth_time=growth_time_stats.variance,
+        mean_growth_time=growth_time_stats.mean,
+        frequency_growth_time=growth_time_stats.frequency,
     )
