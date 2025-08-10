@@ -3,24 +3,38 @@ from httpx import HTTPStatusError
 
 from app.services.pokebase_client import BerryClient
 from app.services.schemas import Berry
-from tests.services.choices.mock_data import cheri_detail, pecha_detail
+from tests.services.choices.mock_data import (aspear_detail, cheri_detail,
+                                              pecha_detail)
 
 
 @pytest.mark.asyncio
 async def test_berry_client_gets_all_details_from_api(mocker):
+    """Test that BerryClient correctly fetches all berry details from the API.
+    Using pagination for the list and then fetching details for each berry."""
     mock_client = mocker.AsyncMock()
     mock_client.get.side_effect = [
         mocker.Mock(
-            json=lambda: mocker.Mock(
-                results=[
+            json=lambda: {
+                "count": 3,
+                "results": [
                     {"name": "cheri", "url": "url1"},
                     {"name": "pecha", "url": "url2"},
                 ],
-                next=None,
-            )
+                "next": "fake_url/v2/berry?page=2",
+            }
+        ),
+        mocker.Mock(
+            json=lambda: {
+                "count": 3,
+                "results": [
+                    {"name": "cheri", "url": "url3"},
+                ],
+                "next": None,
+            }
         ),
         mocker.Mock(json=lambda: cheri_detail),
         mocker.Mock(json=lambda: pecha_detail),
+        mocker.Mock(json=lambda: aspear_detail),
     ]
 
     mocker.patch("httpx.AsyncClient", return_value=mock_client)
@@ -28,23 +42,32 @@ async def test_berry_client_gets_all_details_from_api(mocker):
     client = BerryClient(base_url="fake_url")
     berries = await client.get_all_details()
 
-    assert mock_client.get.call_count == 3
+    assert mock_client.get.call_count == 5
 
     mock_client.get.assert_any_call("fake_url/v2/berry")
+    mock_client.get.assert_any_call("fake_url/v2/berry?page=2")
     mock_client.get.assert_any_call("url1")
     mock_client.get.assert_any_call("url2")
+    mock_client.get.assert_any_call("url3")
 
     assert isinstance(berries, list)
-    assert len(berries) == 2
+    assert len(berries) == 3
     assert all(isinstance(berry, Berry) for berry in berries)
     assert berries[0].name == "cheri"
     assert berries[0].growth_time == 10
     assert berries[1].name == "pecha"
     assert berries[1].growth_time == 5
+    assert berries[0].growth_time == 10
+    assert berries[2].name == "aspear"
+    assert berries[2].growth_time == 7
 
 
 @pytest.mark.asyncio
 async def test_berry_client_raises_error_on_invalid_url(mocker):
+    """
+    Test that BerryClient raises an HTTPStatusError when there is
+    an issue with the API request.
+    """
     mock_client = mocker.AsyncMock()
     mock_client.get.side_effect = HTTPStatusError(
         "Not Found", request=mocker.Mock(), response=mocker.Mock(status_code=404)
