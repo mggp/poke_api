@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Growth Time Graphs{% endblock %}
+
+{% block content %}
+    <h1>Berry Growth Time Graphs</h1>
+    <h3>Histogram of Berry Growth Times:</h3>
+    {% if histogram_data %}
+        <div class="histogram-container">
+            <img src="data:image/png;base64,{{ histogram_data }}" alt="Berry Growth Time Histogram"/>
+        </div>
+    {% else %}
+        <p>No data available for growth times.</p>
+    {% endif %}
+{% endblock %}

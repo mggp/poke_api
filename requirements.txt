@@ -3,3 +3,5 @@ uvicorn
 numpy
 httpx
 pydantic-settings
+matplotlib
+jinja2

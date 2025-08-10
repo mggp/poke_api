@@ -38,3 +38,21 @@ def calculate_stats(data_list: Iterable[int]) -> CommonIntStats:
         raise ValueError("Error calculating statistics") from e
 
     return stats
+
+
+def get_frequencies(data_list: Iterable[int]) -> dict[int, int]:
+    """
+    Returns a frequency dictionary from a list of numerical data.
+    """
+    if not data_list:
+        return {}
+
+    try:
+        data_list = np.fromiter(data_list, dtype=int)
+
+        frequency = Counter(data_list)
+
+    except ValueError as e:
+        raise ValueError("Error computing frequency") from e
+
+    return dict(frequency)
