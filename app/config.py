@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     )
 
     poke_api_path: str
+    float_decimal_places: int = 0
 
 
 settings = Settings()

@@ -6,13 +6,14 @@ from fastapi import status
 from fastapi.testclient import TestClient
 
 from app.main import app
+from tests.fixtures import base_settings
 
 client = TestClient(app)
 
 
 @pytest.mark.asyncio
 @patch("app.routers.berries.BerryClient")
-async def test_all_berry_stats_success(mock_berry_client):
+async def test_all_berry_stats_success(mock_berry_client, base_settings):
     """Test that the /allBerryStats endpoint returns the correct statistics"""
 
     class MockBerry:
@@ -30,10 +31,10 @@ async def test_all_berry_stats_success(mock_berry_client):
     assert data == {
         "berries_names": ["cheri", "pecha"],
         "min_growth_time": 3,
-        "median_growth_time": 3.5,
+        "median_growth_time": 3.50,
         "max_growth_time": 4,
         "variance_growth_time": 0.25,
-        "mean_growth_time": 3.5,
+        "mean_growth_time": 3.50,
         "frequency_growth_time": {"3": 1, "4": 1},
     }
 
