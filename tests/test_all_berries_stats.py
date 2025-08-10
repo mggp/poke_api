@@ -6,23 +6,14 @@ from fastapi import status
 from fastapi.testclient import TestClient
 
 from app.main import app
-from tests.fixtures import base_settings
+from tests.fixtures import base_settings, get_all_berries_mock
 
 client = TestClient(app)
 
 
 @pytest.mark.asyncio
-@patch("app.routers.berries.BerryClient")
-async def test_all_berry_stats_success(mock_berry_client, base_settings):
+async def test_all_berry_stats_success(get_all_berries_mock, base_settings):
     """Test that the /allBerryStats endpoint returns the correct statistics"""
-
-    class MockBerry:
-        def __init__(self, name, growth_time):
-            self.name = name
-            self.growth_time = growth_time
-
-    berries = [MockBerry("cheri", 3), MockBerry("pecha", 4)]
-    mock_berry_client.return_value.get_all_details = AsyncMock(return_value=berries)
 
     response = client.get("/allBerryStats")
     data = response.json()

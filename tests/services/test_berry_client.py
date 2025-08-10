@@ -3,7 +3,8 @@ from httpx import HTTPStatusError
 
 from app.services.pokebase_client import BerryClient
 from app.services.schemas import Berry
-from tests.services.choices.mock_data import aspear_detail, cheri_detail, pecha_detail
+from tests.services.choices.mock_data import (aspear_detail, cheri_detail,
+                                              pecha_detail)
 
 
 @pytest.mark.asyncio
