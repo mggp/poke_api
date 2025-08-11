@@ -4,6 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     poke_api_path: str
     float_decimal_places: int = 0
+    logger_level: str = "INFO"
 
 
 class RedisSettings(BaseSettings):

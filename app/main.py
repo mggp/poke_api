@@ -1,7 +1,12 @@
+import logging
+
 import uvicorn
 from fastapi import FastAPI
 
+from app.config import settings
 from app.routers import berries
+
+logging.basicConfig(level=settings.logger_level)
 
 app = FastAPI(
     title="Poké API",

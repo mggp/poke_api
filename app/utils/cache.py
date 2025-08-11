@@ -1,3 +1,4 @@
+import logging
 import pickle
 from functools import wraps
 
@@ -5,6 +6,8 @@ from redis import Redis
 
 from app.config import redis_settings
 from app.constants import CACHE_PREFIX
+
+logger = logging.getLogger(__name__)
 
 if redis_settings.enabled:
     REDIS_CLIENT = Redis(
@@ -33,7 +36,9 @@ def cache(key, expire_seconds: int = None):
             cached_data = REDIS_CLIENT.get(cache_key)
 
             if cached_data:
-                # TODO: Log cache hit
+                logger.debug(
+                    "Cache hit for function %s with key %s", func.__name__, key
+                )
                 return pickle.loads(cached_data)
 
             result = await func(*args, **kwargs)

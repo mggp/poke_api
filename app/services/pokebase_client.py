@@ -1,9 +1,12 @@
 import asyncio
+import logging
 from typing import List
 
 import httpx
 
 from app.services.schemas import Berry, NamedAPIResource, NamedAPIResourceList
+
+logger = logging.getLogger(__name__)
 
 
 class PokebaseClient:
@@ -34,6 +37,7 @@ class NamedAssetAPIResource[AssetDetailT](PokebaseClient):
         return all_resources
 
     async def get_page(self, url: str) -> NamedAPIResourceList:
+        logger.info("Fetching page from %s", url)
         response = await self.client.get(url)
         response.raise_for_status()
         return NamedAPIResourceList(**response.json())
@@ -44,6 +48,7 @@ class NamedAssetAPIResource[AssetDetailT](PokebaseClient):
         return await asyncio.gather(*detail_tasks)
 
     async def get_detail(self, url: str) -> AssetDetailT:
+        logger.info("Fetching detail from %s", url)
         response = await self.client.get(url)
         response.raise_for_status()
         return self.DETAIL_CLASS(**response.json())

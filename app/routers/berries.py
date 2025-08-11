@@ -1,4 +1,5 @@
 import base64
+import logging
 from typing import List
 
 from fastapi import APIRouter, HTTPException, Request
@@ -14,6 +15,7 @@ from app.services.schemas import Berry
 from app.utils import cache, plots
 from app.utils.stats import calculate_stats, get_frequencies
 
+logger = logging.getLogger(__name__)
 router = APIRouter()
 
 templates = Jinja2Templates(directory=JINJA_TEMPLATES_DIR)
@@ -26,7 +28,8 @@ async def get_berries() -> List[Berry]:
     try:
         berries = await client.get_all_details()
     except HTTPError as e:
-        # Log the error here if needed
+        logger.exception("Failed to fetch berries")
+
         raise HTTPException(
             status_code=500, detail="Failed to fetch berry details from the PokéAPI"
         ) from e
@@ -41,6 +44,7 @@ async def all_berry_stats() -> BerryStatsResponse:
     berries = await get_berries()
 
     if not berries:
+        logger.debug("No berries info found")
         return BerryStatsResponse()
 
     names = [berry.name for berry in berries]
@@ -65,6 +69,8 @@ async def growth_time_graphs(request: Request) -> HTMLResponse:
     berries = await get_berries()
 
     if not berries:
+        logger.debug("No berries info found")
+
         return templates.TemplateResponse(
             name="growth_time_graphs.html",
             request=request,
