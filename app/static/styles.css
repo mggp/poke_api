@@ -1,0 +1,38 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    color: #4CAF50;
+    margin-top: 20px;
+}
+
+h3 {
+    text-align: center;
+    color: #555;
+}
+
+.histogram-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.histogram-container img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    background-color: #fff;
+}
+
+p {
+    text-align: center;
+    color: #777;
+}

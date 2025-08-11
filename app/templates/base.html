@@ -3,6 +3,7 @@
     <head>
         {% block head %}
             <title>{% block title %}{% endblock %}</title>
+            <link rel="icon" type="image/x-icon" href="{{ url_for('static', path='/favicon.png') }}">
         {% endblock %}
     </head>
     <body>
