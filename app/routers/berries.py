@@ -7,22 +7,23 @@ from fastapi.templating import Jinja2Templates
 from httpx import HTTPError
 
 from app.config import settings
+from app.constants import ALL_BERRIES_CACHE_KEY, JINJA_TEMPLATES_DIR
 from app.models import BerryStatsResponse
 from app.services.pokebase_client import BerryClient
 from app.services.schemas import Berry
-from app.utils import plots
+from app.utils import cache, plots
 from app.utils.stats import calculate_stats, get_frequencies
 
 router = APIRouter()
 
-templates = Jinja2Templates(directory="app/templates")
+templates = Jinja2Templates(directory=JINJA_TEMPLATES_DIR)
 
 
+@cache.cache(ALL_BERRIES_CACHE_KEY)
 async def get_berries() -> List[Berry]:
     client = BerryClient(base_url=settings.poke_api_path)
 
     try:
-        # TODO: cache this data
         berries = await client.get_all_details()
     except HTTPError as e:
         # Log the error here if needed

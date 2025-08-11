@@ -21,6 +21,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "80:80"
+    env_file:
+      - .env
     environment:
       - ENV=production
 
@@ -35,3 +37,14 @@ services:
     command: ["python", "-m", "pytest", "tests"]
     environment:
       - ENV=test
+      - REDIS_ENABLED=false
+    env_file:
+      - .env
+    
+  redis:
+    image: redis:7.2-alpine
+    container_name: cache_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--requirepass \"$REDIS_PASSWORD\""]
