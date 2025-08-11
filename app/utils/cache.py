@@ -15,6 +15,7 @@ if redis_settings.enabled:
         port=redis_settings.port,
         db=redis_settings.db,
         password=redis_settings.password,
+        ssl=redis_settings.use_ssl,
     )
 else:
     REDIS_CLIENT = None

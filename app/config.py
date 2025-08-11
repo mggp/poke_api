@@ -14,6 +14,7 @@ class RedisSettings(BaseSettings):
     password: str = ""
     enabled: bool = False
     default_expiration: int = 3600
+    use_ssl: bool = False
 
     model_config = SettingsConfigDict(env_prefix="REDIS_")
 
