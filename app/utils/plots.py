@@ -1,4 +1,3 @@
-import base64
 import io
 from typing import Iterable
 

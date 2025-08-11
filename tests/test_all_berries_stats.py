@@ -1,5 +1,3 @@
-from unittest.mock import AsyncMock, patch
-
 import httpx
 import pytest
 from fastapi import status
@@ -31,13 +29,14 @@ async def test_all_berry_stats_success(get_all_berries_mock, base_settings):
 
 
 @pytest.mark.asyncio
-@patch("app.routers.berries.BerryClient")
-async def test_all_berry_stats_httpx_error(mock_berry_client):
+async def test_all_berry_stats_httpx_error(mocker):
     """Test that BerryClient raises an HTTPStatusError when there is
     an issue with the API request."""
-    mock_berry_client.return_value.get_all_details = AsyncMock(
+    mock_berry_client = mocker.Mock()
+    mock_berry_client.return_value.get_all_details = mocker.AsyncMock(
         side_effect=httpx.HTTPStatusError("error", request=None, response=None)
     )
+    mocker.patch("app.routers.berries.BerryClient", mock_berry_client)
 
     response = client.get("/allBerryStats")
 
@@ -45,11 +44,13 @@ async def test_all_berry_stats_httpx_error(mock_berry_client):
 
 
 @pytest.mark.asyncio
-@patch("app.routers.berries.BerryClient")
-async def test_all_berry_stats_empty(mock_berry_client):
+async def test_all_berry_stats_empty(mocker):
     """Test that the /allBerryStats endpoint returns empty statistics
     when no berries are found."""
-    mock_berry_client.return_value.get_all_details = AsyncMock(return_value=[])
+    mock_berry_client = mocker.Mock()
+    mock_berry_client.return_value.get_all_details = mocker.AsyncMock(return_value=[])
+    mocker.patch("app.routers.berries.BerryClient", mock_berry_client)
+
     response = client.get("/allBerryStats")
     data = response.json()
 
