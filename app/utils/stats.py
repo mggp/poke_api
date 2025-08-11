@@ -20,7 +20,9 @@ def calculate_stats(data_list: Iterable[int]) -> CommonIntStats:
     Gets basic statistics from a list of numerical data.
     """
     if not data_list:
-        return {}
+        return CommonIntStats(
+            min=None, max=None, mean=None, median=None, variance=None, frequency={}
+        )
 
     try:
         data_list = np.fromiter(data_list, dtype=int)
