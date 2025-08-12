@@ -1,8 +1,8 @@
 import logging
 
-from fastapi.staticfiles import StaticFiles
 import uvicorn
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
 from app.constants import BASE_STATICS_DIR
